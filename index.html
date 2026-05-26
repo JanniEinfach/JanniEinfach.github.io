@@ -3,337 +3,479 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="FiveM developer building game scripts, animation tooling, and AI-assisted development workflows.">
-  <title>JanniEinfach — Developer</title>
+  <meta name="description" content="FiveM developer. Scripts, systems, server work. Based in the EU.">
+  <title>JanniEinfach</title>
   <style>
     :root {
-      --bg:           #09090b;
-      --surface:      #111113;
-      --border:       #1f1f23;
-      --border-hover: #3f3f46;
-      --text:         #fafafa;
-      --muted:        #71717a;
-      --accent:       #22d3ee;
-      --accent-dim:   rgba(34, 211, 238, 0.1);
-      --radius:       8px;
-      --font:  system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      --mono:  ui-monospace, 'SF Mono', Menlo, monospace;
+      --bg:       #0b0b0b;
+      --surface:  #131313;
+      --border:   #222;
+      --text:     #e8e8e8;
+      --muted:    #666;
+      --dim:      #444;
+      --amber:    #f5a623;
+      --amber-lo: rgba(245,166,35,.08);
+      --red:      #e03e3e;
+      --mono: 'SF Mono', ui-monospace, Menlo, monospace;
+      --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font);
+      font-family: var(--sans);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* scanline overlay — subtle, gives depth */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,.03) 2px,
+        rgba(0,0,0,.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
     }
 
     a { color: inherit; text-decoration: none; }
 
-    /* ── Layout ── */
-    .container { max-width: 768px; margin: 0 auto; padding: 0 24px; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
 
-    /* ── Nav ── */
-    nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
-    nav .container { display: flex; justify-content: space-between; align-items: center; }
-    .nav-logo { font-family: var(--mono); font-size: 14px; color: var(--accent); font-weight: 500; }
-    .nav-link  { font-size: 14px; color: var(--muted); transition: color 150ms; }
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,11,11,.9);
+      backdrop-filter: blur(12px);
+      padding: 14px 0;
+      z-index: 100;
+    }
+    nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+
+    .logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--amber);
+      letter-spacing: .01em;
+    }
+    .logo::before { content: '~/'; color: var(--dim); }
+
+    .nav-right { display: flex; gap: 20px; align-items: center; }
+    .nav-link { font-size: 13px; color: var(--muted); transition: color 120ms; }
     .nav-link:hover { color: var(--text); }
 
-    /* ── Hero ── */
-    .hero { padding: 80px 0 64px; }
+    /* ─── HERO ─── */
+    .hero { padding: 80px 0 72px; }
 
-    .hero-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; font-family: var(--mono); color: var(--accent);
-      background: var(--accent-dim);
-      border: 1px solid rgba(34, 211, 238, 0.2);
-      border-radius: 100px; padding: 4px 12px; margin-bottom: 24px;
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--amber);
+      background: var(--amber-lo);
+      border: 1px solid rgba(245,166,35,.2);
+      border-radius: 4px;
+      padding: 4px 10px;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
     }
-    .hero-tag::before {
-      content: ''; width: 6px; height: 6px;
-      background: var(--accent); border-radius: 50%;
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 6px var(--amber);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .4; }
     }
 
     h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
-      margin-bottom: 20px;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -.035em;
+      margin-bottom: 22px;
     }
-    h1 span { color: var(--muted); }
+    h1 em { font-style: normal; color: var(--muted); }
 
-    .hero-desc {
-      font-size: 17px; color: var(--muted);
-      max-width: 480px; line-height: 1.65; margin-bottom: 32px;
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 460px;
+      line-height: 1.7;
+      margin-bottom: 36px;
     }
+    .hero p strong { color: var(--text); font-weight: 500; }
 
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; }
 
     .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 20px; border-radius: 6px; font-size: 14px;
-      font-weight: 500; cursor: pointer; transition: all 150ms;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px;
+      font-size: 13px; font-weight: 500;
+      border-radius: 4px;
       border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 140ms;
     }
-    .btn-primary { background: var(--accent); color: #000; }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
-    .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); }
+    .btn-fill  { background: var(--amber); color: #000; }
+    .btn-fill:hover { background: #fbb73a; }
+    .btn-line  { border-color: var(--border); color: var(--muted); }
+    .btn-line:hover { border-color: var(--dim); color: var(--text); }
 
-    hr.divider { border: none; border-top: 1px solid var(--border); }
+    /* ─── DIVIDER ─── */
+    .divider { border: none; border-top: 1px solid var(--border); }
 
-    /* ── Sections ── */
+    /* ─── SECTION SHELL ─── */
     section { padding: 64px 0; }
 
-    .section-label {
-      font-size: 12px; font-family: var(--mono); color: var(--accent);
-      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 6px;
     }
 
     h2 {
-      font-size: 1.5rem; font-weight: 600;
-      letter-spacing: -0.02em; margin-bottom: 32px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: 28px;
+      color: var(--text);
     }
 
-    /* ── Project Grid ── */
-    .projects-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1px; background: var(--border);
-      border: 1px solid var(--border); border-radius: var(--radius);
+    /* ─── PROJECTS ─── */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
       overflow: hidden;
+      margin-bottom: 1px;
     }
 
-    .project-card {
+    .proj-card {
       background: var(--surface);
-      padding: 28px;
-      transition: background 150ms;
+      padding: 24px;
       display: flex; flex-direction: column;
+      transition: background 140ms;
     }
-    .project-card:hover { background: #151518; }
+    .proj-card:hover { background: #181818; }
 
-    .project-header {
+    .proj-top {
       display: flex; justify-content: space-between;
-      align-items: flex-start; margin-bottom: 12px;
+      align-items: flex-start; margin-bottom: 10px;
     }
-    .project-name { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--text); }
+    .proj-name {
+      font-family: var(--mono); font-size: 13px;
+      font-weight: 600; color: var(--text);
+    }
+    .proj-arrow {
+      color: var(--dim); font-size: 14px;
+      transition: color 140ms, transform 140ms;
+    }
+    .proj-card:hover .proj-arrow {
+      color: var(--amber);
+      transform: translate(3px, -3px);
+    }
 
-    .project-arrow { color: var(--muted); font-size: 16px; transition: transform 150ms, color 150ms; }
-    .project-card:hover .project-arrow { transform: translate(2px, -2px); color: var(--accent); }
-
-    .project-desc {
+    .proj-desc {
       font-size: 13px; color: var(--muted);
-      line-height: 1.55; flex: 1; margin-bottom: 20px;
+      line-height: 1.6; flex: 1; margin-bottom: 18px;
     }
 
-    .project-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-    .lang-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px; color: var(--muted); font-family: var(--mono);
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-family: var(--mono); font-size: 11px; color: var(--dim);
     }
-    .lang-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .tag-dot { width: 7px; height: 7px; border-radius: 50%; }
 
-    /* ── Also worked on ── */
-    .also-list {
+    /* extra items below the grid */
+    .also {
       display: flex; flex-direction: column; gap: 1px;
       background: var(--border);
-      border: 1px solid var(--border); border-radius: var(--radius);
+      border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 6px 6px;
       overflow: hidden;
-      margin-top: 16px;
     }
 
     .also-item {
       background: var(--surface);
-      padding: 22px 28px;
-      display: flex; align-items: flex-start; gap: 16px;
-      transition: background 150ms;
+      padding: 20px 24px;
+      display: flex; gap: 14px; align-items: flex-start;
+      transition: background 140ms;
     }
-    .also-item:hover { background: #151518; }
+    .also-item:hover { background: #181818; }
 
-    .also-icon {
-      font-size: 18px; line-height: 1; margin-top: 1px; flex-shrink: 0;
+    .also-icon { font-size: 17px; flex-shrink: 0; margin-top: 2px; }
+    .also-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .also-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ─── HIRE / CTA ─── */
+    .hire-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 36px 32px;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    /* left accent bar */
+    .hire-box::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--amber);
     }
 
-    .also-body { flex: 1; }
+    .hire-box h2 { margin-bottom: 12px; font-size: 1.3rem; }
+    .hire-box p  { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 18px; max-width: 520px; }
+    .hire-box p strong { color: var(--text); font-weight: 500; }
 
-    .also-title {
-      font-size: 14px; font-weight: 600;
-      color: var(--text); margin-bottom: 4px;
+    .hire-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 7px;
+      margin-bottom: 28px;
+    }
+    .hire-list li {
+      font-size: 13px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hire-list li::before {
+      content: '—';
+      color: var(--amber);
+      font-family: var(--mono);
+      flex-shrink: 0;
     }
 
-    .also-desc {
-      font-size: 13px; color: var(--muted); line-height: 1.55;
+    /* ─── SKILLS ─── */
+    .skill-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .skill {
+      font-family: var(--mono); font-size: 12px;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 5px 12px;
+      transition: all 140ms;
     }
+    .skill:hover { color: var(--text); border-color: var(--dim); }
 
-    /* ── Skills ── */
-    .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .skill-tag {
-      font-size: 13px; font-family: var(--mono); color: var(--muted);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 6px; padding: 6px 14px; transition: all 150ms;
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
     }
-    .skill-tag:hover { color: var(--text); border-color: var(--border-hover); }
+    footer .wrap {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .foot-l { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .foot-r { font-size: 12px; color: var(--muted); transition: color 140ms; }
+    .foot-r:hover { color: var(--amber); }
 
-    /* ── Footer ── */
-    footer { border-top: 1px solid var(--border); padding: 32px 0; }
-    footer .container { display: flex; justify-content: space-between; align-items: center; }
-    .footer-text { font-size: 13px; color: var(--muted); font-family: var(--mono); }
-    .footer-link { font-size: 13px; color: var(--muted); transition: color 150ms; }
-    .footer-link:hover { color: var(--accent); }
-
-    /* ── Responsive ── */
-    @media (max-width: 600px) {
-      .projects-grid { grid-template-columns: 1fr; }
-      footer .container { flex-direction: column; gap: 12px; text-align: center; }
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 580px) {
+      .proj-grid { grid-template-columns: 1fr; }
+      footer .wrap { flex-direction: column; gap: 10px; }
+      .hire-box { padding: 28px 22px; }
     }
   </style>
 </head>
 <body>
 
   <nav>
-    <div class="container">
-      <span class="nav-logo">JanniEinfach</span>
-      <a href="https://github.com/JanniEinfach" class="nav-link" target="_blank" rel="noopener">GitHub →</a>
+    <div class="wrap">
+      <span class="logo">JanniEinfach</span>
+      <div class="nav-right">
+        <a href="#work" class="nav-link">work</a>
+        <a href="#hire" class="nav-link">hire me</a>
+        <a href="https://github.com/JanniEinfach" class="nav-link" target="_blank" rel="noopener">github ↗</a>
+      </div>
     </div>
   </nav>
 
   <main>
-    <div class="container">
+    <div class="wrap">
       <section class="hero">
-        <div class="hero-tag">FiveM · AI Tooling · Open Source</div>
-        <h1>Developer &amp;<br><span>Tool Builder.</span></h1>
-        <p class="hero-desc">
-          I build scripts and tooling for GTA&nbsp;V multiplayer —
-          emote systems, entity inspectors, animation compilers,
-          and AI-assisted development workflows.
-          Framework-agnostic. Shipped to production.
+        <div class="status-pill"><span class="dot"></span>open for server work</div>
+
+        <h1>I write Lua.<br><em>Mostly for GTA.</em></h1>
+
+        <p>
+          Been doing <strong>FiveM development</strong> for a few years now —
+          custom scripts, emote systems, entity tooling, the whole thing.
+          Also built some AI-assisted dev workflows that save me a lot of time.
+          If it runs on a roleplay server, I've probably touched it.
         </p>
-        <div class="hero-actions">
-          <a href="#projects" class="btn btn-primary">View Projects</a>
-          <a href="https://github.com/JanniEinfach" class="btn btn-ghost" target="_blank" rel="noopener">GitHub Profile</a>
+
+        <div class="btns">
+          <a href="#work" class="btn btn-fill">see what I've built</a>
+          <a href="#hire" class="btn btn-line">work with me</a>
         </div>
       </section>
     </div>
 
     <hr class="divider">
 
-    <div class="container">
-      <section id="projects">
-        <p class="section-label">// projects</p>
-        <h2>Things I've built</h2>
+    <div class="wrap">
+      <section id="work">
+        <p class="eyebrow">// projects</p>
+        <h2>Things I've shipped</h2>
 
-        <div class="projects-grid">
+        <div class="proj-grid">
 
-          <!-- jn-idgun (public) -->
           <a href="https://github.com/JanniEinfach/jn-idgun"
-             target="_blank" rel="noopener"
-             class="project-card">
-            <div class="project-header">
-              <span class="project-name">jn-idgun</span>
-              <span class="project-arrow">↗</span>
+             target="_blank" rel="noopener" class="proj-card">
+            <div class="proj-top">
+              <span class="proj-name">jn-idgun</span>
+              <span class="proj-arrow">↗</span>
             </div>
-            <p class="project-desc">
-              Modern entity inspector for FiveM. Point at any ped, vehicle,
-              or object to surface its model hash, network ID, coords, and
-              runtime metadata. Framework-agnostic.
+            <p class="proj-desc">
+              Point at any ped, vehicle or prop and you get everything —
+              model hash, network ID, coords, runtime metadata.
+              Sounds small, saves hours when you're debugging a packed server.
+              Open source, no framework dependency.
             </p>
-            <div class="project-footer">
-              <span class="lang-badge">
-                <span class="lang-dot" style="background:#000080"></span>Lua
+            <div class="tags">
+              <span class="tag">
+                <span class="tag-dot" style="background:#000080"></span>Lua
               </span>
             </div>
           </a>
 
-          <!-- claude-brain-setup (public) -->
           <a href="https://github.com/JanniEinfach/claude-brain-setup"
-             target="_blank" rel="noopener"
-             class="project-card">
-            <div class="project-header">
-              <span class="project-name">claude-brain-setup</span>
-              <span class="project-arrow">↗</span>
+             target="_blank" rel="noopener" class="proj-card">
+            <div class="proj-top">
+              <span class="proj-name">claude-brain-setup</span>
+              <span class="proj-arrow">↗</span>
             </div>
-            <p class="project-desc">
-              Unofficial Claude Code configuration toolkit for disciplined,
-              token-efficient AI-assisted development — skills, rules, agents,
-              and hooks as a drop-in setup.
+            <p class="proj-desc">
+              My personal Claude Code setup — skills, hooks, rules, agents.
+              Basically how I set up AI-assisted development in a way that
+              doesn't get in the way. Pushed it public in case it's useful to
+              someone else.
             </p>
-            <div class="project-footer">
-              <span class="lang-badge">
-                <span class="lang-dot" style="background:#3572A5"></span>Python
+            <div class="tags">
+              <span class="tag">
+                <span class="tag-dot" style="background:#3572A5"></span>Python
               </span>
-              <span class="lang-badge">
-                <span class="lang-dot" style="background:#3178c6"></span>TypeScript
+              <span class="tag">
+                <span class="tag-dot" style="background:#3178c6"></span>TypeScript
               </span>
             </div>
           </a>
 
         </div>
 
-        <div class="also-list">
-
+        <div class="also">
           <div class="also-item">
             <span class="also-icon">🎭</span>
-            <div class="also-body">
-              <p class="also-title">Emote Menu — Quasar / FiveM Ecosystem</p>
+            <div>
+              <p class="also-name">Emote Menu (Quasar ecosystem)</p>
               <p class="also-desc">
-                Co-developer on a full-featured emote menu for FiveM roleplay servers.
-                Multi-source emote library, 9-language localization, NUI-based Dark+Cyan interface,
-                greenscreen capture support. Compatible with QBox, QBCore, ESX, and Standalone setups.
+                Co-dev on a full emote menu for FiveM RP servers. NUI-based, Dark+Cyan design,
+                9 languages, multi-source emote library, greenscreen support.
+                Runs on QBox, QBCore, ESX and standalone — had to write a bunch of the
+                framework bridge myself.
               </p>
             </div>
           </div>
 
           <div class="also-item">
             <span class="also-icon">🦴</span>
-            <div class="also-body">
-              <p class="also-title">GTA-V Animation Tooling</p>
+            <div>
+              <p class="also-name">GTA-V Animation Tooling</p>
               <p class="also-desc">
-                Custom YCD compiler and skeleton previewer for GTA V modding —
-                Three.js-based 3D rig preview, full mp_m_freemode_01 skeleton support,
-                and import pipeline for external animation sources.
+                Custom YCD compiler + a skeleton previewer that runs in the browser.
+                Three.js rig viewer, full mp_m_freemode_01 skeleton, import pipeline
+                for external animation sources. Built this because nothing else
+                let me iterate fast enough.
               </p>
             </div>
           </div>
+        </div>
 
+      </section>
+    </div>
+
+    <hr class="divider">
+
+    <div class="wrap">
+      <section id="hire">
+        <p class="eyebrow">// work with me</p>
+        <h2>Building a FiveM server?</h2>
+
+        <div class="hire-box">
+          <p>
+            I do <strong>freelance FiveM development</strong> — custom scripts,
+            full systems, or just fixing the thing that's been broken for three months.
+            No bloated boilerplate, no overcomplicated quotes. Just tell me what you need.
+          </p>
+
+          <ul class="hire-list">
+            <li>Custom scripts & resources (QBox / QBCore / ESX / standalone)</li>
+            <li>Full job systems, economy scripts, menus, HUDs</li>
+            <li>Performance fixes & server-side security hardening</li>
+            <li>NUI interfaces — design + Lua integration</li>
+            <li>Bug hunting on existing resources</li>
+          </ul>
+
+          <div class="btns">
+            <a href="mailto:joannis486@googlemail.com" class="btn btn-fill">get in touch</a>
+            <a href="https://github.com/JanniEinfach" class="btn btn-line" target="_blank" rel="noopener">github profile</a>
+          </div>
         </div>
       </section>
     </div>
 
     <hr class="divider">
 
-    <div class="container">
+    <div class="wrap">
       <section>
-        <p class="section-label">// stack</p>
-        <h2>What I work with</h2>
-        <div class="skills-grid">
-          <span class="skill-tag">Lua</span>
-          <span class="skill-tag">TypeScript</span>
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">C#</span>
-          <span class="skill-tag">React</span>
-          <span class="skill-tag">Three.js</span>
-          <span class="skill-tag">FiveM / GTA-V</span>
-          <span class="skill-tag">NUI</span>
-          <span class="skill-tag">Blender</span>
-          <span class="skill-tag">QBox</span>
-          <span class="skill-tag">QBCore</span>
-          <span class="skill-tag">ESX</span>
-          <span class="skill-tag">Claude Code</span>
-          <span class="skill-tag">ox_lib</span>
+        <p class="eyebrow">// stack</p>
+        <h2>What I actually use</h2>
+        <div class="skill-row">
+          <span class="skill">Lua</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">Python</span>
+          <span class="skill">C#</span>
+          <span class="skill">React</span>
+          <span class="skill">Three.js</span>
+          <span class="skill">FiveM</span>
+          <span class="skill">GTA-V modding</span>
+          <span class="skill">NUI</span>
+          <span class="skill">Blender</span>
+          <span class="skill">QBox</span>
+          <span class="skill">QBCore</span>
+          <span class="skill">ESX</span>
+          <span class="skill">ox_lib</span>
+          <span class="skill">oxmysql</span>
         </div>
       </section>
     </div>
-
   </main>
 
   <footer>
-    <div class="container">
-      <span class="footer-text">JanniEinfach · 2026</span>
-      <a href="https://github.com/JanniEinfach" class="footer-link"
+    <div class="wrap">
+      <span class="foot-l">JanniEinfach · 2026</span>
+      <a href="https://github.com/JanniEinfach" class="foot-r"
          target="_blank" rel="noopener">github.com/JanniEinfach →</a>
     </div>
   </footer>
