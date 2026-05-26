@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FiveM developer building game scripts, animation tooling, and AI-assisted development workflows.">
+  <title>JanniEinfach — Developer</title>
+  <style>
+    :root {
+      --bg:           #09090b;
+      --surface:      #111113;
+      --border:       #1f1f23;
+      --border-hover: #3f3f46;
+      --text:         #fafafa;
+      --muted:        #71717a;
+      --accent:       #22d3ee;
+      --accent-dim:   rgba(34, 211, 238, 0.1);
+      --radius:       8px;
+      --font:  system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --mono:  ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Layout ── */
+    .container { max-width: 768px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Nav ── */
+    nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo { font-family: var(--mono); font-size: 14px; color: var(--accent); font-weight: 500; }
+    .nav-link  { font-size: 14px; color: var(--muted); transition: color 150ms; }
+    .nav-link:hover { color: var(--text); }
+
+    /* ── Hero ── */
+    .hero { padding: 80px 0 64px; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-family: var(--mono); color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(34, 211, 238, 0.2);
+      border-radius: 100px; padding: 4px 12px; margin-bottom: 24px;
+    }
+    .hero-tag::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    h1 span { color: var(--muted); }
+
+    .hero-desc {
+      font-size: 17px; color: var(--muted);
+      max-width: 480px; line-height: 1.65; margin-bottom: 32px;
+    }
+
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 6px; font-size: 14px;
+      font-weight: 500; cursor: pointer; transition: all 150ms;
+      border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); }
+
+    hr.divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ── Sections ── */
+    section { padding: 64px 0; }
+
+    .section-label {
+      font-size: 12px; font-family: var(--mono); color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.5rem; font-weight: 600;
+      letter-spacing: -0.02em; margin-bottom: 32px;
+    }
+
+    /* ── Project Grid ── */
+    .projects-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .project-card {
+      background: var(--surface);
+      padding: 28px;
+      transition: background 150ms;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover { background: #151518; }
+
+    .project-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 12px;
+    }
+    .project-name { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--text); }
+
+    .project-arrow { color: var(--muted); font-size: 16px; transition: transform 150ms, color 150ms; }
+    .project-card:hover .project-arrow { transform: translate(2px, -2px); color: var(--accent); }
+
+    .project-desc {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.55; flex: 1; margin-bottom: 20px;
+    }
+
+    .project-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .lang-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--muted); font-family: var(--mono);
+    }
+    .lang-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── Also worked on ── */
+    .also-list {
+      display: flex; flex-direction: column; gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .also-item {
+      background: var(--surface);
+      padding: 22px 28px;
+      display: flex; align-items: flex-start; gap: 16px;
+      transition: background 150ms;
+    }
+    .also-item:hover { background: #151518; }
+
+    .also-icon {
+      font-size: 18px; line-height: 1; margin-top: 1px; flex-shrink: 0;
+    }
+
+    .also-body { flex: 1; }
+
+    .also-title {
+      font-size: 14px; font-weight: 600;
+      color: var(--text); margin-bottom: 4px;
+    }
+
+    .also-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.55;
+    }
+
+    /* ── Skills ── */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .skill-tag {
+      font-size: 13px; font-family: var(--mono); color: var(--muted);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 6px 14px; transition: all 150ms;
+    }
+    .skill-tag:hover { color: var(--text); border-color: var(--border-hover); }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--border); padding: 32px 0; }
+    footer .container { display: flex; justify-content: space-between; align-items: center; }
+    .footer-text { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+    .footer-link { font-size: 13px; color: var(--muted); transition: color 150ms; }
+    .footer-link:hover { color: var(--accent); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      footer .container { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-logo">JanniEinfach</span>
+      <a href="https://github.com/JanniEinfach" class="nav-link" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      <section class="hero">
+        <div class="hero-tag">FiveM · AI Tooling · Open Source</div>
+        <h1>Developer &amp;<br><span>Tool Builder.</span></h1>
+        <p class="hero-desc">
+          I build scripts and tooling for GTA&nbsp;V multiplayer —
+          emote systems, entity inspectors, animation compilers,
+          and AI-assisted development workflows.
+          Framework-agnostic. Shipped to production.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="https://github.com/JanniEinfach" class="btn btn-ghost" target="_blank" rel="noopener">GitHub Profile</a>
+        </div>
+      </section>
+    </div>
+
+    <hr class="divider">
+
+    <div class="container">
+      <section id="projects">
+        <p class="section-label">// projects</p>
+        <h2>Things I've built</h2>
+
+        <div class="projects-grid">
+
+          <!-- jn-idgun (public) -->
+          <a href="https://github.com/JanniEinfach/jn-idgun"
+             target="_blank" rel="noopener"
+             class="project-card">
+            <div class="project-header">
+              <span class="project-name">jn-idgun</span>
+              <span class="project-arrow">↗</span>
+            </div>
+            <p class="project-desc">
+              Modern entity inspector for FiveM. Point at any ped, vehicle,
+              or object to surface its model hash, network ID, coords, and
+              runtime metadata. Framework-agnostic.
+            </p>
+            <div class="project-footer">
+              <span class="lang-badge">
+                <span class="lang-dot" style="background:#000080"></span>Lua
+              </span>
+            </div>
+          </a>
+
+          <!-- claude-brain-setup (public) -->
+          <a href="https://github.com/JanniEinfach/claude-brain-setup"
+             target="_blank" rel="noopener"
+             class="project-card">
+            <div class="project-header">
+              <span class="project-name">claude-brain-setup</span>
+              <span class="project-arrow">↗</span>
+            </div>
+            <p class="project-desc">
+              Unofficial Claude Code configuration toolkit for disciplined,
+              token-efficient AI-assisted development — skills, rules, agents,
+              and hooks as a drop-in setup.
+            </p>
+            <div class="project-footer">
+              <span class="lang-badge">
+                <span class="lang-dot" style="background:#3572A5"></span>Python
+              </span>
+              <span class="lang-badge">
+                <span class="lang-dot" style="background:#3178c6"></span>TypeScript
+              </span>
+            </div>
+          </a>
+
+        </div>
+
+        <div class="also-list">
+
+          <div class="also-item">
+            <span class="also-icon">🎭</span>
+            <div class="also-body">
+              <p class="also-title">Emote Menu — Quasar / FiveM Ecosystem</p>
+              <p class="also-desc">
+                Co-developer on a full-featured emote menu for FiveM roleplay servers.
+                Multi-source emote library, 9-language localization, NUI-based Dark+Cyan interface,
+                greenscreen capture support. Compatible with QBox, QBCore, ESX, and Standalone setups.
+              </p>
+            </div>
+          </div>
+
+          <div class="also-item">
+            <span class="also-icon">🦴</span>
+            <div class="also-body">
+              <p class="also-title">GTA-V Animation Tooling</p>
+              <p class="also-desc">
+                Custom YCD compiler and skeleton previewer for GTA V modding —
+                Three.js-based 3D rig preview, full mp_m_freemode_01 skeleton support,
+                and import pipeline for external animation sources.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <hr class="divider">
+
+    <div class="container">
+      <section>
+        <p class="section-label">// stack</p>
+        <h2>What I work with</h2>
+        <div class="skills-grid">
+          <span class="skill-tag">Lua</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">C#</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Three.js</span>
+          <span class="skill-tag">FiveM / GTA-V</span>
+          <span class="skill-tag">NUI</span>
+          <span class="skill-tag">Blender</span>
+          <span class="skill-tag">QBox</span>
+          <span class="skill-tag">QBCore</span>
+          <span class="skill-tag">ESX</span>
+          <span class="skill-tag">Claude Code</span>
+          <span class="skill-tag">ox_lib</span>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <span class="footer-text">JanniEinfach · 2026</span>
+      <a href="https://github.com/JanniEinfach" class="footer-link"
+         target="_blank" rel="noopener">github.com/JanniEinfach →</a>
+    </div>
+  </footer>
+
+</body>
+</html>
