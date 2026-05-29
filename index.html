@@ -417,27 +417,45 @@
     max-width: 620px;
     margin: 0 0 28px;
   }
+  .services-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
   .services {
     list-style: none;
     margin: 0 0 36px;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px 28px;
+    gap: 8px;
   }
   .services li {
-    display: flex; align-items: flex-start; gap: 12px;
-    font-size: 14.5px;
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px;
     color: #d1ccc6;
     line-height: 1.5;
+    padding: 11px 14px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .services li:hover {
+    border-color: rgba(245,166,35,0.28);
+    background: rgba(245,166,35,0.035);
   }
   .services li::before {
     content: ">";
     color: var(--amber);
     font-family: var(--mono);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 11px;
     flex-shrink: 0;
-    margin-top: 1px;
+    margin-top: 3px;
   }
   .hire-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -624,6 +642,7 @@
           I'm mainly the guy you hit up when you want your server set up properly — picking the right framework, getting the core resources in place, putting it all together until it actually runs. For custom scripts I keep it straightforward: small everyday scripts, quick tweaks, stuff your server is missing but nothing crazy complex. No bloat, no over-engineering.
         </p>
 
+        <p class="services-label">what I handle</p>
         <ul class="services">
           <li>Full server setup from scratch — framework choice, core resources, the works</li>
           <li>Custom scripts (QBox / QBCore / ESX / standalone)</li>
