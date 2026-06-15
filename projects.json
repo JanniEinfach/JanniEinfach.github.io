@@ -6,8 +6,16 @@
     "featured": true,
     "label": "featured · open source",
     "description": "Entity inspector for FiveM. Point a gun at a prop, vehicle, or ped and it spits out the model hash, network ID, owner, coords — whatever you need for debugging. Zero framework dependency, drops into any server clean.",
-    "tags": ["Lua", "FiveM", "standalone", "QBox", "QBCore", "ESX"],
-    "url": "https://github.com/JanniEinfach/jn-idgun"
+    "tags": [
+      "Lua",
+      "FiveM",
+      "standalone",
+      "QBox",
+      "QBCore",
+      "ESX"
+    ],
+    "url": "https://github.com/JanniEinfach/jn-idgun",
+    "stars": 0
   },
   {
     "name": "SonosMirror",
@@ -16,8 +24,16 @@
     "featured": true,
     "label": "open source",
     "description": "Streams system audio from a Formuler Z12 Android TV box to a Sonos speaker over Wi-Fi — no root, no HDMI-ARC. Uses REMOTE_SUBMIX + shell UID reflection to capture all audio including FLAG_CAPTURE_PRIVATE apps.",
-    "tags": ["Kotlin", "Java", "Android", "Sonos", "UPnP", "ADB"],
-    "url": "https://github.com/JanniEinfach/SonosMirror"
+    "tags": [
+      "Kotlin",
+      "Java",
+      "Android",
+      "Sonos",
+      "UPnP",
+      "ADB"
+    ],
+    "url": "https://github.com/JanniEinfach/SonosMirror",
+    "stars": 0
   },
   {
     "name": "claude-brain-setup",
@@ -25,8 +41,14 @@
     "category": "tooling",
     "featured": false,
     "description": "My Claude Code config toolkit — scripts, hooks, prompts and the brain I reuse across all projects.",
-    "tags": ["Python", "TypeScript", "tooling", "CLI"],
-    "url": "https://github.com/JanniEinfach/claude-brain-setup"
+    "tags": [
+      "Python",
+      "TypeScript",
+      "tooling",
+      "CLI"
+    ],
+    "url": "https://github.com/JanniEinfach/claude-brain-setup",
+    "stars": 0
   },
   {
     "name": "emote-menu",
@@ -35,7 +57,11 @@
     "featured": false,
     "coming_soon": true,
     "description": "NUI emote browser for the Quasar FiveM ecosystem. Dark+Cyan design. All major frameworks supported.",
-    "tags": ["NUI", "React", "Quasar Store"],
+    "tags": [
+      "NUI",
+      "React",
+      "Quasar Store"
+    ],
     "url": null
   },
   {
@@ -44,7 +70,24 @@
     "category": "fivem",
     "featured": false,
     "description": "YCD compiler + Three.js skeleton previewer for custom FiveM emotes. Blender pipeline for keyframe animation directly to GTA V .ycd without mocap.",
-    "tags": ["Python", "Three.js", "Blender", "FiveM", "YCD"],
+    "tags": [
+      "Python",
+      "Three.js",
+      "Blender",
+      "FiveM",
+      "YCD"
+    ],
     "url": "https://github.com/JanniEinfach"
+  },
+  {
+    "name": "janni-intake-bot",
+    "display": "janni-intake-bot",
+    "category": "other",
+    "featured": false,
+    "description": "Client onboarding bot for JanniEinfach",
+    "tags": [],
+    "url": "https://github.com/JanniEinfach/janni-intake-bot",
+    "stars": 0,
+    "auto_added": true
   }
 ]
